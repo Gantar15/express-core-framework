@@ -1,0 +1,13 @@
+{
+	"configurations": [
+		{
+			"name": "Launch nodemon",
+			"request": "launch",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon.cmd",
+			"restart": true,
+			"console": "integratedTerminal",
+			"type": "node",
+			"internalConsoleOptions": "neverOpen"
+		}
+	]
+}
