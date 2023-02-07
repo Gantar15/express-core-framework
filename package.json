@@ -1,0 +1,38 @@
+{
+  "name": "api-app",
+  "version": "1.0.0",
+  "description": "api with architecture",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dest/main.js",
+    "dev": "nodemon",
+    "build": "tsc",
+    "lint": "eslint ./src/**/*",
+    "lint:fix": "eslint ./src/**/* --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "node"
+  ],
+  "author": "Yahor Paulouski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "inversify": "^6.0.1",
+    "reflect-metadata": "^0.1.13",
+    "tslog": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}
