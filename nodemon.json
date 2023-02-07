@@ -4,5 +4,6 @@
     "ignore": [
         "src/**/*.spec.ts"
     ],
-    "exec": "ts-node ./src/main.ts"
+    "exec": "ts-node ./src/main.ts",
+    "inspect": "localhost:9229"
 }
