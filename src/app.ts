@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, RequestHandler } from "express";
 import { Server } from "http";
 import { UserController } from "./users/users.controller";
 import { ILogger } from "./logger/logger.interface";
@@ -22,6 +22,10 @@ export class App {
 		this.port = 8000;
 	}
 
+	useMiddleware(middleware: RequestHandler): void {
+		this.app.use(middleware);
+	}
+
 	useRoutes(): void {
 		this.app.use("/users", this.userController.router);
 	}
@@ -31,6 +35,7 @@ export class App {
 	}
 
 	public init(): void {
+		this.useMiddleware(express.json());
 		this.useRoutes();
 		this.useExeptionFilters();
 		this.server = this.app.listen(this.port);
