@@ -3,8 +3,8 @@ import { TYPES } from "../types";
 import { UserRegisterDto } from "./dto/user.register.dto";
 import { User } from "./user.entity";
 import { IUserService } from "./users.service.interface";
-import "reflect-metadata";
 import { IConfigurationService } from "../config/configuration.service.interface";
+import "reflect-metadata";
 
 @injectable()
 export class UserService implements IUserService {

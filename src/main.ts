@@ -2,6 +2,7 @@ import { Container, ContainerModule } from "inversify";
 import { App } from "./app";
 import { ConfigurationService } from "./config/configuration.service";
 import { IConfigurationService } from "./config/configuration.service.interface";
+import { PrismaService } from "./database/prisma.service";
 import { ExceptionFilter } from "./errors/exception.filter";
 import { IExeptionFilter } from "./errors/exception.filter.interface";
 import { ILogger } from "./logger/logger.interface";
@@ -26,6 +27,7 @@ export const appBindings = new ContainerModule((bind) => {
 	bind<IConfigurationService>(TYPES.IConfigurationService)
 		.to(ConfigurationService)
 		.inSingletonScope();
+	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
 });
 
 function bootstrap(): IBootsrtapReturn {
