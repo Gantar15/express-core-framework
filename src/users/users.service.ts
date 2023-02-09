@@ -7,6 +7,7 @@ import { IConfigurationService } from "../config/configuration.service.interface
 import "reflect-metadata";
 import { IUsersRepository } from "./users.repository.interface";
 import { UserModel } from "@prisma/client";
+import { UserLoginDto } from "./dto/user.login.dto";
 
 @injectable()
 export class UserService implements IUserService {
@@ -24,7 +25,12 @@ export class UserService implements IUserService {
 		return this.usersRepository.create(newUser);
 	}
 
-	async validateUser(dto: UserRegisterDto): Promise<boolean> {
-		return true;
+	async validateUser(user: UserLoginDto): Promise<boolean> {
+		const existedUser = await this.usersRepository.find(user.email);
+		if (!existedUser) {
+			return false;
+		}
+		const newUser = new User(existedUser.email, existedUser.name, existedUser.password);
+		return newUser.comparePassword(user.password);
 	}
 }
