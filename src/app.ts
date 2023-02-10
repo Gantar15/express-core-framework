@@ -8,6 +8,7 @@ import { IExeptionFilter } from "./errors/exception.filter.interface";
 import { IConfigurationService } from "./config/configuration.service.interface";
 import { PrismaService } from "./database/prisma.service";
 import "reflect-metadata";
+import { AuthMiddleware } from "./common/auth.middleware";
 
 @injectable()
 export class App {
@@ -26,8 +27,10 @@ export class App {
 		this.port = 8000;
 	}
 
-	useMiddleware(middleware: RequestHandler): void {
-		this.app.use(middleware);
+	useMiddleware(): void {
+		this.app.use(express.json());
+		const authMiddleware = new AuthMiddleware(this.configurationService.get("TOKEN-SECRET"));
+		this.app.use(authMiddleware.execute.bind(authMiddleware));
 	}
 
 	useRoutes(): void {
@@ -39,7 +42,7 @@ export class App {
 	}
 
 	public init(): void {
-		this.useMiddleware(express.json());
+		this.useMiddleware();
 		this.useRoutes();
 		this.useExeptionFilters();
 		this.prismaService.connect();

@@ -10,12 +10,15 @@ import { IUserService } from "./users.service.interface";
 import { HTTPError } from "../errors/http-error.class";
 import { ValidateMiddleware } from "../common/validate.middleware";
 import "reflect-metadata";
+import { sign } from "jsonwebtoken";
+import { IConfigurationService } from "../config/configuration.service.interface";
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
 	constructor(
 		@inject(TYPES.ILogger) private loggerService: ILogger,
 		@inject(TYPES.IUserService) private userService: IUserService,
+		@inject(TYPES.IConfigurationService) private configurationService: IConfigurationService,
 	) {
 		super(loggerService);
 		this.bindRoutes([
@@ -31,7 +34,18 @@ export class UserController extends BaseController implements IUserController {
 				func: this.login,
 				middlewares: [new ValidateMiddleware(UserLoginDto)],
 			},
+			{
+				path: "/info",
+				method: "get",
+				func: this.info,
+			},
 		]);
+	}
+
+	async info({ user }: Request, res: Response, next: NextFunction): Promise<void> {
+		this.ok(res, {
+			email: user,
+		});
 	}
 
 	async login(
@@ -43,7 +57,10 @@ export class UserController extends BaseController implements IUserController {
 		if (!result) {
 			return next(new HTTPError(401, "Ошибка авторизации", "login"));
 		}
-		this.ok(res, "login");
+		const jwt = await this.signJWT(req.body.email, this.configurationService.get("TOKEN-SECRET"));
+		this.ok(res, {
+			jwt,
+		});
 	}
 
 	async register(
@@ -59,6 +76,27 @@ export class UserController extends BaseController implements IUserController {
 		this.ok(res, {
 			email: result.email,
 			id: result.id,
+		});
+	}
+
+	private signJWT(email: string, secret: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			sign(
+				{
+					email,
+					iat: Math.floor(Date.now() / 1000),
+				},
+				secret,
+				{
+					algorithm: "HS256",
+				},
+				(err, token) => {
+					if (err) {
+						reject(err);
+					}
+					resolve(token as string);
+				},
+			);
 		});
 	}
 }
