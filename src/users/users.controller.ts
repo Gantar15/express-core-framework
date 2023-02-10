@@ -12,6 +12,7 @@ import { ValidateMiddleware } from "../common/validate.middleware";
 import "reflect-metadata";
 import { sign } from "jsonwebtoken";
 import { IConfigurationService } from "../config/configuration.service.interface";
+import { AuthGuard } from "../common/auth.guard";
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
@@ -38,13 +39,16 @@ export class UserController extends BaseController implements IUserController {
 				path: "/info",
 				method: "get",
 				func: this.info,
+				middlewares: [new AuthGuard()],
 			},
 		]);
 	}
 
 	async info({ user }: Request, res: Response, next: NextFunction): Promise<void> {
+		const userInfo = await this.userService.getUserInfo(user);
 		this.ok(res, {
-			email: user,
+			email: userInfo?.email,
+			id: userInfo?.id,
 		});
 	}
 
