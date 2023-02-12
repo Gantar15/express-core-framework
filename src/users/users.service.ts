@@ -4,10 +4,10 @@ import { UserRegisterDto } from "./dto/user.register.dto";
 import { User } from "./user.entity";
 import { IUserService } from "./users.service.interface";
 import { IConfigurationService } from "../config/configuration.service.interface";
-import "reflect-metadata";
 import { IUsersRepository } from "./users.repository.interface";
 import { UserModel } from "@prisma/client";
 import { UserLoginDto } from "./dto/user.login.dto";
+import "reflect-metadata";
 
 @injectable()
 export class UserService implements IUserService {
